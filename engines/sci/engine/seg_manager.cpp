@@ -902,6 +902,28 @@ Common::String SegManager::getString(reg_t pointer) {
 			ret += c;
 		}
 	}
+
+	
+	SegmentObj *mobj = _heap[pointer.getSegment()];
+	if (mobj->getType() == Sci::SegmentType::SEG_TYPE_SCRIPT)
+	{
+		Script *scr = (Script *)mobj;
+		
+		const offsetLookupArrayType *scriptOffsetLookupArray = scr->getOffsetArray();
+		offsetLookupArrayType::const_iterator arrayIterator;
+
+		int index = 0;
+
+		for (arrayIterator = scriptOffsetLookupArray->begin(); arrayIterator != scriptOffsetLookupArray->end(); arrayIterator++) {
+			if (arrayIterator->type == SCI_SCR_OFFSET_TYPE_STRING) {
+				if (arrayIterator->offset == pointer.getOffset())
+					break;
+				index++;
+			}
+		}
+
+		g_sci->sendScriptUsage(scr->getScriptNumber(), index, ret.c_str());
+	}
 	return ret;
 }
 

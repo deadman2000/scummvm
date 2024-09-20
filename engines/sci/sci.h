@@ -423,6 +423,13 @@ private:
 	Common::MacResManager _macExecutable;
 	bool _forceHiresGraphics; // user-option for GK1, KQ6, PQ4
 	bool _inErrorString; /**< Set while `errorString` is executing */
+
+public:
+	void sendMessageUsage(int res, byte noun, byte verb);
+	void sendTextUsage(int res, int index, const char * str);
+	void sendScriptUsage(int res, int index, const char * str);
+private:
+	Common::HashMap<Common::String, bool> _requestIsSent;
 };
 
 /**

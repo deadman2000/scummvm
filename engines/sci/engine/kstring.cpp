@@ -80,6 +80,8 @@ reg_t kStrCpy(EngineState *s, int argc, reg_t *argv) {
 		s->_segMan->strcpy_(argv[0], argv[1]);
 	}
 
+	s->_segMan->getString(argv[1]);
+
 	return argv[0];
 }
 

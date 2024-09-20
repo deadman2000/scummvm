@@ -40,7 +40,7 @@ namespace OpenGL {
 // HACK: We use glColor in the OSD code. This might not be working on GL ES but
 // we still enable it because Tizen already shipped with it. Also, the
 // SurfaceSDL backend enables it and disabling it can cause issues in sdl.cpp.
-#define USE_OSD 1
+//#define USE_OSD 1
 
 class Surface;
 class Pipeline;

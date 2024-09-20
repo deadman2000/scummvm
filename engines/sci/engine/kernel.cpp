@@ -932,7 +932,10 @@ Common::String Kernel::lookupText(reg_t address, int index) {
 			;
 
 	if (textlen)
+	{
+		g_sci->sendTextUsage(address.getOffset(), _index, seeker);
 		return seeker;
+	}
 
 	error("Index %d out of bounds in text.%03d", _index, address.getOffset());
 }

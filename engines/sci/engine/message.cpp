@@ -310,6 +310,8 @@ bool MessageState::getRecord(CursorStack &stack, bool recurse, MessageRecord &re
 }
 
 int MessageState::getMessage(int module, const MessageTuple &t, reg_t buf) {
+	g_sci->sendMessageUsage(module, t.noun, t.verb);
+
 	_cursorStack.init(module, t);
 	return nextMessage(buf);
 }
@@ -507,6 +509,8 @@ void MessageState::outputString(reg_t buf, const Common::String &str) {
 		sciString->fromString(str);
 	} else {
 #endif
+		debugN("%s\n", str.c_str());
+
 		SegmentRef buffer_r = _segMan->dereference(buf);
 
 		if ((unsigned)buffer_r.maxSize >= str.size() + 1) {
