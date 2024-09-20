@@ -3097,6 +3097,17 @@ static const struct ADGameDescription SciGameDescriptions[] = {
 		{"resource.003", 0, "96033f57accfca903750413fd09193c8", 592834},
 		AD_LISTEND},
 		Common::EN_ANY, Common::kPlatformDOS, 0, GUIO_STD16_PALETTEMODS	},
+		
+	// Larry 2 - Russian DOS
+	// 1.002.000 3x3.5" (label: INT#0.000.409)
+	{"lsl2", "", {
+		{"resource.map", 0, "2c9c3b0923e3764f5ab999bcb71c2d47", 4758},
+		{"resource.001", 0, "4a24443a25e2b1492462a52809605dc2", 477625},
+		{"resource.002", 0, "4a24443a25e2b1492462a52809605dc2", 406935},
+		{"resource.003", 0, "4a24443a25e2b1492462a52809605dc2", 592533},
+		{"Translate.RU", 0, "3f730611f55257821b964f96eafea0ba", 171}, // Text file for detecting translation
+		AD_LISTEND},
+		Common::RU_RUS, Common::kPlatformDOS, 0, GUIO_STD16_PALETTEMODS	},
 
 	// Larry 2 - English DOS (supplied by ssburnout in bug report #5270)
 	// 1.002.000 3x3.5" (label: INT#0.000.409)
@@ -3180,6 +3191,18 @@ static const struct ADGameDescription SciGameDescriptions[] = {
 		{ "resource.005", 0, "17bfd686d59accc3fb3f079ad9278e66", 794252 },
 		AD_LISTEND },
 		Common::DE_DEU, Common::kPlatformAmiga, ADGF_ADDENGLISH, GUIO_STD16 },
+		
+	// Larry 3 - Russian DOS
+	// SCI interpreter version 0.000.572
+	{"lsl3", "", {
+		{"resource.map", 0, "0b6bd3e039682830a51c5755c06591db", 5916},
+		{"resource.001", 0, "f18441027154292836b973c655fa3175", 456722},
+		{"resource.002", 0, "f18441027154292836b973c655fa3175", 578024},
+		{"resource.003", 0, "f18441027154292836b973c655fa3175", 506807},
+		{"resource.004", 0, "f18441027154292836b973c655fa3175", 513651},
+		{"Translate.RU", 0, "3f730611f55257821b964f96eafea0ba", 171}, // Text file for detecting translation
+		AD_LISTEND},
+		Common::RU_RUS, Common::kPlatformDOS, 0, GUIO_STD16_UNDITHER	},
 
 	// Larry 3 - English Atari ST
 	// Game version 1.021, 1990-01-27
