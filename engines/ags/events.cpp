@@ -341,6 +341,10 @@ AGS3::eAGSKeyCode EventsManager::scummvm_key_to_ags_key(const Common::Event &eve
 
 	if (event.kbd.ascii >= 32 && event.kbd.ascii <= 127)
 		return static_cast<AGS3::eAGSKeyCode>(event.kbd.ascii);
+	
+	// Russian unicode letters
+	if (event.kbd.ascii >= 0x400 && event.kbd.ascii <= 0x4ff)
+		return AGS3::eAGSKeyCode::eAGSKeyCodeA;
 
 	// Remaining codes may match or not, but we use a big table anyway.
 	// TODO: this is code by [sonneveld],

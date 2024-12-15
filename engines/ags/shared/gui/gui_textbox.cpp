@@ -91,10 +91,22 @@ void GUITextBox::OnKeyPress(const KeyInput &ki) {
 		return; // not a textual event
 	if ((ki.UChar >= 128) && (!font_supports_extended_characters(Font)))
 		return; // unsupported letter
+	
+	int ch = ki.UChar;
+
+	// UTF-8 to CP866
+	if (ch >= 0x400 && ch <= 0x4ff) {
+		if (ch == 0x401) // Cyrillic ¨ (401h UTF-16) is 0xf0 in CP866
+			ch = 0xf0;
+		else if (ch >= 0x440)
+			ch = ch - 0x410 + 0xb0;
+		else
+			ch = ch - 0x410 + 0x80;
+	}
 
 	(get_uformat() == U_UTF8) ?
 		Text.Append(ki.Text) :
-		Text.AppendChar(ki.UChar);
+		Text.AppendChar(ch);
 	// if the new string is too long, remove the new character
 	if (get_text_width(Text.GetCStr(), Font) > (Width - (6 + get_fixed_pixel_size(5))))
 		Backspace(Text);
