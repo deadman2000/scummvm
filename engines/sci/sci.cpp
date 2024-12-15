@@ -19,9 +19,6 @@
  *
  */
 
-#include "backends/networking/curl/curljsonrequest.h"
-#include "backends/networking/curl/connectionmanager.h"
-
 #include "common/system.h"
 #include "common/config-manager.h"
 #include "common/debug-channels.h"
@@ -1114,79 +1111,6 @@ uint32 SciEngine::getTickCount() {
 }
 void SciEngine::setTickCount(const uint32 ticks) {
 	return setTotalPlayTime(ticks * 1000 / 60);
-}
-
-constexpr auto SEND_GAME = "";
-constexpr auto PROJECT = "";
-constexpr auto SEND_URL = "http://192.168.1.17/api/extapprove";
-//constexpr auto SEND_URL = "http://localhost:5000/api/extapprove";
-
-void SciEngine::sendMessageUsage(int res, byte noun, byte verb)
-{
-	if (getFilePrefix() != SEND_GAME) return;
-
-	Common::String key = Common::String::format("msg.%d.%d.%d", res, noun, verb);
-	if (_requestIsSent.contains(key)) return;
-	_requestIsSent.setVal(key, true);
-	
-	Networking::CurlJsonRequest *request = new Networking::CurlJsonRequest(nullptr, nullptr, SEND_URL);
-	request->addHeader("Content-Type: application/json");
-
-	Common::JSONObject jsonRequestParameters;
-	jsonRequestParameters.setVal("project", new Common::JSONValue(PROJECT));
-	jsonRequestParameters.setVal("type", new Common::JSONValue("msg"));
-	jsonRequestParameters.setVal("res", new Common::JSONValue((long long int)res));
-	jsonRequestParameters.setVal("noun", new Common::JSONValue((long long int)noun));
-	jsonRequestParameters.setVal("verb", new Common::JSONValue((long long int)verb));
-	Common::JSONValue value(jsonRequestParameters);
-	request->addPostField(Common::JSON::stringify(&value));
-	ConnMan.addRequest(request);
-}
-
-void SciEngine::sendTextUsage(int res, int index, const char * str)
-{
-	if (getFilePrefix() != SEND_GAME) return;
-	
-	Common::String key = Common::String::format("txt.%d.%d", res, index);
-	if (_requestIsSent.contains(key)) return;
-	_requestIsSent.setVal(key, true);
-
-	debugN("txt.%03d %d %s\n", res, index, str);
-
-	Networking::CurlJsonRequest *request = new Networking::CurlJsonRequest(nullptr, nullptr, SEND_URL);
-	request->addHeader("Content-Type: application/json");
-
-	Common::JSONObject jsonRequestParameters;
-	jsonRequestParameters.setVal("project", new Common::JSONValue(PROJECT));
-	jsonRequestParameters.setVal("type", new Common::JSONValue("txt"));
-	jsonRequestParameters.setVal("res", new Common::JSONValue((long long int)res));
-	jsonRequestParameters.setVal("index", new Common::JSONValue((long long int)index));
-	Common::JSONValue value(jsonRequestParameters);
-	request->addPostField(Common::JSON::stringify(&value));
-	ConnMan.addRequest(request);
-}
-
-void SciEngine::sendScriptUsage(int res, int index, const char * str)
-{
-	if (getFilePrefix() != SEND_GAME) return;
-	
-	Common::String key = Common::String::format("scr.%d.%d", res, index);
-	if (_requestIsSent.contains(key)) return;
-	_requestIsSent.setVal(key, true);
-	
-	debugN("scr.%03d %d %s\n", res, index, str);
-
-	Networking::CurlJsonRequest *request = new Networking::CurlJsonRequest(nullptr, nullptr, SEND_URL);
-	request->addHeader("Content-Type: application/json");
-
-	Common::JSONObject jsonRequestParameters;
-	jsonRequestParameters.setVal("project", new Common::JSONValue(PROJECT));
-	jsonRequestParameters.setVal("type", new Common::JSONValue("scr"));
-	jsonRequestParameters.setVal("res", new Common::JSONValue((long long int)res));
-	jsonRequestParameters.setVal("index", new Common::JSONValue((long long int)index));
-	Common::JSONValue value(jsonRequestParameters);
-	request->addPostField(Common::JSON::stringify(&value));
-	ConnMan.addRequest(request);
 }
 
 } // End of namespace Sci

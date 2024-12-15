@@ -28,6 +28,8 @@
 #include "common/platform.h"
 #include "common/queue.h"
 #include "common/singleton.h"
+#include "common/hashmap.h"
+#include "common/hash-str.h"
 
 class OSystem;
 class MetaEngineDetection;
@@ -234,8 +236,7 @@ private:
 	 */
 	GUI::Debugger *_debugger;
 public:
-
-
+	
 	/**
 	 * Engine features.
 	 *
@@ -667,6 +668,15 @@ protected:
 	 * Syncs the engine's mixer using the default volume syncing behavior.
 	 */
 	void defaultSyncSoundSettings();
+
+public:
+	void sendMessageUsage(int res, byte noun, byte verb);
+	void sendTextUsage(int res, int index, const char * str);
+	void sendScriptUsage(int res, int index, const char * str);
+	void sendUsage(const char * str, const char * tr);
+
+private:
+	Common::HashMap<Common::String, bool> _requestIsSent;
 };
 
 

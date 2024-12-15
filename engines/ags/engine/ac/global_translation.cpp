@@ -31,6 +31,7 @@
 #include "ags/shared/util/memory.h"
 #include "ags/engine/ac/string.h"
 #include "ags/globals.h"
+#include "engines/engine.h"
 
 namespace AGS3 {
 
@@ -54,7 +55,10 @@ const char *get_translation(const char *text) {
 	const auto &transtree = get_translation_tree();
 	const auto it = transtree.find(text);
 	if (it != transtree.end())
+	{
+		g_engine->sendUsage(text, it->_value.GetCStr());
 		return it->_value.GetCStr();
+	}
 
 	// return the original text
 	return text;
