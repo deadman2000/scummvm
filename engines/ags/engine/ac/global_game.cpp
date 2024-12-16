@@ -222,8 +222,9 @@ int GetGlobalInt(int index) {
 void SetGlobalString(int index, const char *newval) {
 	if ((index < 0) | (index >= MAXGLOBALSTRINGS))
 		quitprintf("!SetGlobalString: invalid index %d, supported range is %d - %d", index, 0, MAXGLOBALSTRINGS - 1);
-	debug_script_log("GlobalString %d set to '%s'", index, newval);
-	snprintf(_GP(play).globalstrings[index], MAX_MAXSTRLEN, "%s", newval);
+	const char *tr = get_translation(newval);
+	debug_script_log("GlobalString %d set to '%s'", index, tr);
+	snprintf(_GP(play).globalstrings[index], MAX_MAXSTRLEN, "%s", tr);
 }
 
 void GetGlobalString(int index, char *strval) {
