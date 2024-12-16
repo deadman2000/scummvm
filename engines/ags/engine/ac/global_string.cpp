@@ -49,8 +49,9 @@ void _sc_strcat(char *s1, const char *s2) {
 	// make sure they don't try to append a char to the string
 	VALIDATE_STRING(s2);
 	check_strlen(s1);
+	const char * trs2 = get_translation(s2);
 	int mosttocopy = (_G(MAXSTRLEN) - strlen(s1)) - 1;
-	my_strncpy(&s1[strlen(s1)], s2, mosttocopy);
+	my_strncpy(&s1[strlen(s1)], trs2, mosttocopy);
 }
 
 void _sc_strlower(char *desbuf) {
@@ -68,7 +69,8 @@ void _sc_strupper(char *desbuf) {
 void _sc_strcpy(char *destt, const char *text) {
 	VALIDATE_STRING(destt);
 	check_strlen(destt);
-	my_strncpy(destt, text, _G(MAXSTRLEN) - 1);
+	const char * tr = get_translation(text);
+	my_strncpy(destt, tr, _G(MAXSTRLEN) - 1);
 }
 
 } // namespace AGS3
