@@ -85,8 +85,13 @@ void GiveScore(int amnt) {
 	GUI::MarkSpecialLabelsForUpdate(kLabelMacro_AllScore);
 	_GP(play).score += amnt;
 
-	if ((amnt > 0) && (_GP(play).score_sound >= 0))
-		play_audio_clip_by_index(_GP(play).score_sound);
+	int sndnum = _GP(play).score_sound;
+	if ((amnt > 0) && (sndnum > 0))
+	{
+		ScriptAudioClip *aclip = GetAudioClipForOldStyleNumber(_GP(game), false, sndnum);
+		if (aclip)
+			play_audio_clip_by_index(aclip->id);
+	}
 
 	run_on_event(GE_GOT_SCORE, RuntimeScriptValue().SetInt32(amnt));
 }

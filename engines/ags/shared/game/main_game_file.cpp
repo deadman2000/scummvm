@@ -615,9 +615,7 @@ void RemapLegacySoundNums(GameSetupStruct &game, std::vector<ViewStruct> &views,
 	// Setup sound clip played on score event
 	game.scoreClipID = -1;
 	if (game.options[OPT_SCORESOUND] > 0) {
-		ScriptAudioClip *clip = GetAudioClipForOldStyleNumber(game, false, game.options[OPT_SCORESOUND]);
-		if (clip)
-			game.scoreClipID = clip->id;
+		game.scoreClipID = game.options[OPT_SCORESOUND];
 	}
 
 	// Reset view frame clip refs
