@@ -1052,8 +1052,8 @@ void PauseToken::operator=(PauseToken &&t2) {
 }
 #endif
 
-constexpr auto SEND_GAME = "leisuresuitlarry2-1";
-constexpr auto PROJECT = "larry_2_pnc";
+constexpr auto SEND_GAME = "lsl3-ru";
+constexpr auto PROJECT = "larry_3";
 constexpr auto VOLUME = "extracted_trs";
 constexpr auto SEND_URL = "http://192.168.1.17/api/extapprove";
 //constexpr auto SEND_URL = "http://localhost:5000/api/extapprove";

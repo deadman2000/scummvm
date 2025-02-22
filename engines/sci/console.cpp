@@ -35,6 +35,7 @@
 #include "sci/engine/gc.h"
 #include "sci/engine/features.h"
 #include "sci/engine/scriptdebug.h"
+#include "sci/engine/script.h"
 #include "sci/sound/midiparser_sci.h"
 #include "sci/sound/music.h"
 #include "sci/sound/drivers/mididriver.h"
@@ -2426,6 +2427,8 @@ bool Console::cmdPrintSegmentTable(int argc, const char **argv) {
 	for (uint i = 0; i < _engine->_gamestate->_segMan->_heap.size(); i++) {
 		SegmentObj *mobj = _engine->_gamestate->_segMan->_heap[i];
 		if (mobj && mobj->getType()) {
+			if (mobj->getType() != SEG_TYPE_SCRIPT) continue;
+			if ((*(Script *)mobj).getOffsetSaidCount() == 0) continue;
 			debugPrintf(" [%04x] ", i);
 
 			switch (mobj->getType()) {
