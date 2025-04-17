@@ -321,7 +321,10 @@ int MessageState::nextMessage(reg_t buf) {
 
 	if (!buf.isNull()) {
 		if (getRecord(_cursorStack, true, record)) {
-			outputString(buf, processString(record.string, record.length));
+			auto str = processString(record.string, record.length);
+			debugN("msg.%d %s\n", _cursorStack.getModule(), str.c_str());
+
+			outputString(buf, str);
 			_lastReturned = record.tuple;
 			_lastReturnedModule = _cursorStack.getModule();
 			_cursorStack.top().seq++;
@@ -509,8 +512,6 @@ void MessageState::outputString(reg_t buf, const Common::String &str) {
 		sciString->fromString(str);
 	} else {
 #endif
-		debugN("%s\n", str.c_str());
-
 		SegmentRef buffer_r = _segMan->dereference(buf);
 
 		if ((unsigned)buffer_r.maxSize >= str.size() + 1) {
