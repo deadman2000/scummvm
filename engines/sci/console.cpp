@@ -259,6 +259,7 @@ Console::Console(SciEngine *engine) : GUI::Debugger(),
 	registerCmd("vo",					WRAP_METHOD(Console, cmdViewObject));				// alias
 	registerCmd("active_object",		WRAP_METHOD(Console, cmdViewActiveObject));
 	registerCmd("acc_object",			WRAP_METHOD(Console, cmdViewAccumulatorObject));
+	registerCmd("set_prop", WRAP_METHOD(Console, cmdSetProp));
 
 	_debugState.seeking = kDebugSeekNothing;
 	_debugState.seekLevel = 0;
@@ -3362,6 +3363,52 @@ bool Console::cmdDumpReference(int argc, const char **argv) {
 	out.close();
 
 	debugPrintf("Wrote %u bytes to %s\n", bytesWritten, outFileName.toString(Common::Path::kNativeSeparator).c_str());
+	return true;
+}
+
+bool Console::cmdSetProp(int argc, const char **argv) {
+	if (argc != 4) {
+		debugPrintf("Usage: %s <address> <selector name> <value>\n", argv[0]);
+		debugPrintf("Check the \"addresses\" command on how to use addresses\n");
+		return true;
+	}
+
+	reg_t addr;
+	if (parse_reg_t(_engine->_gamestate, argv[1], &addr)) {
+		debugPrintf("Invalid address passed.\n");
+		debugPrintf("Check the \"addresses\" command on how to use addresses\n");
+		return true;
+	}
+
+	
+	Object *obj = _engine->_gamestate->_segMan->getObject(addr);
+	if (!obj) {
+		debugPrintf("%04x:%04x is not an object.\n", PRINT_REG(addr));
+		return true;
+	}
+
+	const Selector selector = _engine->getKernel()->findSelector(argv[2]);
+	if (selector == -1) {
+		debugPrintf("Invalid selector '%s'.\n", argv[2]);
+		return true;
+	}
+
+	const int index = obj->locateVarSelector(_engine->_gamestate->_segMan, selector);
+	if (index == -1) {
+		debugPrintf("Selector '%s' is not valid for object %04x:%04x.\n", argv[2], PRINT_REG(addr));
+		return true;
+	}
+
+	EngineState *s = _engine->_gamestate;
+	reg_t value;
+	if (parse_reg_t(s, argv[3], &value)) {
+		debugPrintf("Invalid value/address passed.\n");
+		debugPrintf("Check the \"addresses\" command on how to use addresses\n");
+		debugPrintf("Or pass a decimal or hexadecimal value directly (e.g. 12, 1Ah)\n");
+		return true;
+	}
+
+	obj->getVariableRef(index) = value;
 	return true;
 }
 

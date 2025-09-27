@@ -172,6 +172,7 @@ private:
 	bool cmdViewReference(int argc, const char **argv);
 	bool cmdDumpReference(int argc, const char **argv);
 	bool cmdViewObject(int argc, const char **argv);
+	bool cmdSetProp(int argc, const char **argv);
 	bool cmdViewActiveObject(int argc, const char **argv);
 	bool cmdViewAccumulatorObject(int argc, const char **argv);
 	// Variables
