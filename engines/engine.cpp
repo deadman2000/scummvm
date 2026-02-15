@@ -1,4 +1,4 @@
-/* ScummVM - Graphic Adventure Engine
+﻿/* ScummVM - Graphic Adventure Engine
  *
  * ScummVM is the legal property of its developers, whose names
  * are too numerous to list here. Please refer to the COPYRIGHT
@@ -1052,22 +1052,24 @@ void PauseToken::operator=(PauseToken &&t2) {
 }
 #endif
 
-constexpr auto SEND_GAME = "freddypharkas-cd-1";
-constexpr auto PROJECT = "freddy_pharkas_cd";
-constexpr auto VOLUME = "extracted_trs";
-constexpr auto SEND_URL = "http://192.168.1.17/api/extapprove";
+constexpr auto SEND_GAME = "ags-fallback";
+constexpr auto PROJECT = "gobliins_6";
+constexpr auto VOLUME = "gobliins_6";
+constexpr auto SEND_URL = "https://quests-translate.ru/api/extapprove";
 //constexpr auto SEND_URL = "http://localhost:5000/api/extapprove";
 
-void Engine::sendMessageUsage(int res, byte noun, byte verb)
+void Engine::sendMessageUsage(int res, byte noun, byte verb, byte seq, byte cond)
 {
 	if (_targetName != SEND_GAME) return;
 
-	Common::String key = Common::String::format("msg.%d.%d.%d", res, noun, verb);
+	Common::String key = Common::String::format("msg.%d.%d.%d.%d.%d", res, noun, verb, cond, seq);
 	if (_requestIsSent.contains(key)) return;
 	_requestIsSent.setVal(key, true);
 	
 	Networking::CurlJsonRequest *request = new Networking::CurlJsonRequest(nullptr, nullptr, SEND_URL);
 	request->addHeader("Content-Type: application/json");
+
+	debugN("SEND %s\n", key.c_str());
 
 	Common::JSONObject jsonRequestParameters;
 	jsonRequestParameters.setVal("project", new Common::JSONValue(PROJECT));
@@ -1075,6 +1077,8 @@ void Engine::sendMessageUsage(int res, byte noun, byte verb)
 	jsonRequestParameters.setVal("res", new Common::JSONValue((long long int)res));
 	jsonRequestParameters.setVal("noun", new Common::JSONValue((long long int)noun));
 	jsonRequestParameters.setVal("verb", new Common::JSONValue((long long int)verb));
+	jsonRequestParameters.setVal("seq", new Common::JSONValue((long long int)seq));
+	jsonRequestParameters.setVal("cond", new Common::JSONValue((long long int)cond));
 	Common::JSONValue value(jsonRequestParameters);
 	request->addPostField(Common::JSON::stringify(&value));
 	ConnMan.addRequest(request);
@@ -1088,7 +1092,7 @@ void Engine::sendTextUsage(int res, int index, const char * str)
 	if (_requestIsSent.contains(key)) return;
 	_requestIsSent.setVal(key, true);
 
-	debugN("txt.%03d %d %s\n", res, index, str);
+	debugN("SEND txt.%03d %d %s\n", res, index, str);
 
 	Networking::CurlJsonRequest *request = new Networking::CurlJsonRequest(nullptr, nullptr, SEND_URL);
 	request->addHeader("Content-Type: application/json");
@@ -1111,7 +1115,7 @@ void Engine::sendScriptUsage(int res, int index, const char * str)
 	if (_requestIsSent.contains(key)) return;
 	_requestIsSent.setVal(key, true);
 	
-	debugN("scr.%03d %d %s\n", res, index, str);
+	debugN("SEND scr.%03d %d %s\n", res, index, str);
 
 	Networking::CurlJsonRequest *request = new Networking::CurlJsonRequest(nullptr, nullptr, SEND_URL);
 	request->addHeader("Content-Type: application/json");
@@ -1134,7 +1138,7 @@ void Engine::sendUsage(const char * str, const char * tr)
 	if (_requestIsSent.contains(key)) return;
 	_requestIsSent.setVal(key, true);
 
-	debugN("%s\n", tr);
+	debugN("SEND %s\n", tr);
 
 	Networking::CurlJsonRequest *request = new Networking::CurlJsonRequest(nullptr, nullptr, SEND_URL);
 	request->addHeader("Content-Type: application/json");

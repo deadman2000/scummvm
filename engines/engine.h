@@ -670,7 +670,7 @@ protected:
 	void defaultSyncSoundSettings();
 
 public:
-	void sendMessageUsage(int res, byte noun, byte verb);
+	void sendMessageUsage(int res, byte noun, byte verb, byte seq, byte cond);
 	void sendTextUsage(int res, int index, const char * str);
 	void sendScriptUsage(int res, int index, const char * str);
 	void sendUsage(const char * str, const char * tr);

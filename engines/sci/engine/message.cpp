@@ -1,4 +1,4 @@
-/* ScummVM - Graphic Adventure Engine
+﻿/* ScummVM - Graphic Adventure Engine
  *
  * ScummVM is the legal property of its developers, whose names
  * are too numerous to list here. Please refer to the COPYRIGHT
@@ -310,8 +310,6 @@ bool MessageState::getRecord(CursorStack &stack, bool recurse, MessageRecord &re
 }
 
 int MessageState::getMessage(int module, const MessageTuple &t, reg_t buf) {
-	g_sci->sendMessageUsage(module, t.noun, t.verb);
-
 	_cursorStack.init(module, t);
 	return nextMessage(buf);
 }
@@ -322,7 +320,8 @@ int MessageState::nextMessage(reg_t buf) {
 	if (!buf.isNull()) {
 		if (getRecord(_cursorStack, true, record)) {
 			auto str = processString(record.string, record.length);
-			debugN("msg.%d %s\n", _cursorStack.getModule(), str.c_str());
+			debugN("msg.%d [%d %d %d %d] %s\n", _cursorStack.getModule(), record.tuple.noun, record.tuple.verb, record.tuple.cond, record.tuple.seq, str.c_str());
+			g_sci->sendMessageUsage(_cursorStack.getModule(), record.tuple.noun, record.tuple.verb, record.tuple.seq, record.tuple.cond);
 
 			outputString(buf, str);
 			_lastReturned = record.tuple;
